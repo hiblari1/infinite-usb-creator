@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-desktop:
+  build-all:
     permissions:
       contents: write
     strategy:
@@ -40,9 +40,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: v__VERSION__ # tauri-action replaces this with the app version
+          tagName: app-v__VERSION__
           releaseName: "Infinite USB v__VERSION__"
-          releaseBody: "Automated release from GitHub Actions"
+          releaseBody: "Automated build for all platforms."
           releaseDraft: true
           prerelease: false
 
@@ -68,9 +68,6 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
           
-      - name: setup android sdk
-        uses: android-actions/setup-android-sdk@v1
-        
       - name: install frontend dependencies
         run: npm install
         
