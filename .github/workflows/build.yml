@@ -16,66 +16,60 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
-      
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-          
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
-        
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libayatana-appindicator3-dev librsvg2-dev patchelf
-          
       - name: install frontend dependencies
         run: npm install
-        
       - name: build tauri app
-        uses: tauri-apps/tauri-action@v0
+        run: |
+          npm run build
+          npx tauri build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          tagName: v__VERSION__
-          releaseName: "Infinite USB v__VERSION__"
-          releaseBody: "Automated build for all platforms."
-          releaseDraft: true
-          prerelease: false
+          name: desktop-artifacts-${{ matrix.platform }}
+          path: |
+            src-tauri/target/release/bundle/msi/*.msi
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/dmg/*.dmg
 
   build-android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-          
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android, armv7-linux-androideabi, i686-linux-android, x86_64-linux-android
-          
       - name: setup java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-          
       - name: install frontend dependencies
         run: npm install
-        
       - name: build android apk
         run: |
           npm run build
           npx tauri android build --apk
-          
       - name: upload apk
         uses: actions/upload-artifact@v4
         with:
