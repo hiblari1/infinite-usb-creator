@@ -14,6 +14,7 @@
     "build:appimage": "tauri build --bundles appimage"
   },
   "dependencies": {
+    "@tauri-apps/cli": "^1.5.0",
     "@google/genai": "^1.29.0",
     "@material/material-color-utilities": "^0.4.0",
     "@tailwindcss/vite": "^4.1.14",
