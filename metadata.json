@@ -1,0 +1,5 @@
+{
+  "name": "Infinite USB",
+  "description": "High-performance hardware flashing utility and bootloader architect. Built for Arch Linux, macOS, and Windows.",
+  "requestFramePermissions": []
+}
