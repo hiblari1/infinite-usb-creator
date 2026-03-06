@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-all:
+  build-desktop:
     permissions:
       contents: write
     strategy:
@@ -40,7 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__
+          tagName: v__VERSION__
           releaseName: "Infinite USB v__VERSION__"
           releaseBody: "Automated build for all platforms."
           releaseDraft: true
